@@ -24,5 +24,6 @@ public class Produit {
     private String imageUrl; // Stocke l'URL de l'image
 
     @ManyToOne
+
     private CategorieProduit categorie;
 }

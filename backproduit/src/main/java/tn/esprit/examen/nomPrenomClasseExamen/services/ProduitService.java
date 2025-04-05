@@ -46,4 +46,9 @@ public class ProduitService {
                 .orElseThrow(() -> new RuntimeException("Produit not found"));
         produitRepository.delete(produit);
     }
+
+
+    public List<Produit> getProduitsByCategorie(Long categorieId) {
+        return produitRepository.findByCategorie(categorieId);
+    }
 }

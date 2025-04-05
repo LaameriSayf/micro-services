@@ -15,13 +15,13 @@ import tn.esprit.examen.nomPrenomClasseExamen.services.UserService;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 
-@RestController
-@RequestMapping("/api/auth/user")
+//@RestController
+//@RequestMapping("/api/auth/user")
 
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
+  //  @Autowired
     UserService us;
 
     private final AuthentificationService service;

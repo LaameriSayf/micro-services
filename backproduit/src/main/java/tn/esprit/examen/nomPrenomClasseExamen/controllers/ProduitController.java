@@ -1,6 +1,7 @@
 package tn.esprit.examen.nomPrenomClasseExamen.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.nomPrenomClasseExamen.entities.Produit;
 import tn.esprit.examen.nomPrenomClasseExamen.services.ProduitService;
@@ -45,5 +46,14 @@ public class ProduitController {
     @DeleteMapping("/deleteProduit/{id}")
     public void deleteProduit(@PathVariable Long id) {
         produitService.deleteProduit(id);
+    }
+
+    @GetMapping("/byCategorie/{categorieId}")
+    public ResponseEntity<List<Produit>> getProduitsByCategorie(@PathVariable Long categorieId) {
+        List<Produit> produits = produitService.getProduitsByCategorie(categorieId);
+        if (produits.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Si aucune donnée n'est trouvée
+        }
+        return ResponseEntity.ok(produits);
     }
 }

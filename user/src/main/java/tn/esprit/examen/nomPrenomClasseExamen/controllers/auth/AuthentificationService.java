@@ -18,14 +18,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
+
 @RequiredArgsConstructor
 public class AuthentificationService {
-    @Autowired
+   // @Autowired
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    @Autowired
+   // @Autowired
     private RoleRepository roleRepository;
 
     private final AuthenticationManager authenticationManager;
