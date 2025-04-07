@@ -49,6 +49,6 @@ public class ProduitService {
 
 
     public List<Produit> getProduitsByCategorie(Long categorieId) {
-        return produitRepository.findByCategorie(categorieId);
+        return produitRepository.findByCategorieId(categorieId);
     }
 }

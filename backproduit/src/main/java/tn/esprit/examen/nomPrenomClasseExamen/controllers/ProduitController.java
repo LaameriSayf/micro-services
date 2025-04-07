@@ -2,6 +2,7 @@ package tn.esprit.examen.nomPrenomClasseExamen.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.examen.nomPrenomClasseExamen.entities.Produit;
 import tn.esprit.examen.nomPrenomClasseExamen.services.ProduitService;
@@ -25,11 +26,11 @@ public class ProduitController {
     }
 
     // Récupérer tous les produits
+    @PreAuthorize("hasAuthority('ROLE_admin')")
     @GetMapping("/getAllProduits")
     public List<Produit> getAllProduits() {
         return produitService.getAllProduits();
     }
-
     // Récupérer un produit par ID
     @GetMapping("/getProduitById/{id}")
     public Optional<Produit> getProduitById(@PathVariable Long id) {

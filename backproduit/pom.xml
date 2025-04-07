@@ -79,6 +79,40 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
             </dependency>
+
+
+                <!-- Spring Security -->
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                    <version>2.6.6</version> <!-- Assure-toi que la version correspond à ta version de Spring Boot -->
+
+                </dependency>
+
+                <!-- OAuth2 Resource Server pour JWT (avec Keycloak) -->
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+                <version>2.7.5</version> <!-- Vérifie que tu utilises la bonne version de Spring Security -->
+
+            </dependency>
+
+
+            <!-- (Facultatif) JWT decoder -->
+                <dependency>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-oauth2-jose</artifactId>
+                </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.keycloak/keycloak-spring-boot-starter -->
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-spring-boot-starter</artifactId>
+                <version>25.0.3</version>
+            </dependency>
+
+
         </dependencies>
     <dependencyManagement>
         <dependencies>

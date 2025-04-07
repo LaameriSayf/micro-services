@@ -1,5 +1,6 @@
 package tn.esprit.examen.nomPrenomClasseExamen.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+
 public class Produit {
 
     @Id
@@ -23,7 +25,9 @@ public class Produit {
     private int stock;
     private String imageUrl; // Stocke l'URL de l'image
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference  // Empêche la sérialisation du côté Catégorie
+
 
     private CategorieProduit categorie;
 }
