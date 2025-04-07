@@ -1,0 +1,180 @@
+<div class="container py-4">
+  <h2 class="text-center mb-4">Gestion des Produits</h2>
+
+  <!-- Formulaire d'ajout -->
+  <div class="card mb-4 shadow">
+    <div class="card-header bg-primary text-white">Ajouter un Produit</div>
+    <div class="card-body">
+      <form (ngSubmit)="addProduit()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="nom" [(ngModel)]="produit.nom" name="nom" required />
+          </div>
+
+          <div class="col-md-6">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" [(ngModel)]="produit.description" name="description" required />
+          </div>
+
+          <div class="col-md-4">
+            <label for="prix" class="form-label">Prix</label>
+            <input type="number" class="form-control" id="prix" [(ngModel)]="produit.prix" name="prix" required />
+          </div>
+
+          <div class="col-md-4">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" class="form-control" id="stock" [(ngModel)]="produit.stock" name="stock" required />
+          </div>
+
+          <div class="col-md-4">
+            <label for="imageUrl" class="form-label">URL Image</label>
+            <input type="text" class="form-control" id="imageUrl" [(ngModel)]="produit.imageUrl" name="imageUrl" required />
+          </div>
+
+          <div class="col-md-6">
+            <label for="categorie" class="form-label">Catégorie</label>
+            <select class="form-select" [(ngModel)]="produit.categorie" name="categorie" required>
+              <option *ngFor="let category of categories" [ngValue]="category">{{ produit.categorie.nom }}</option>
+            </select>
+          </div>
+
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-success">Ajouter</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des produits -->
+  <div>
+    <label for="categorieSelect">Filtrer par catégorie:</label>
+    <select id="categorieSelect" [(ngModel)]="selectedCategorieId" (change)="filterProduitsByCategorie()">
+      <option *ngFor="let categorie of categories" [value]="categorie.id">{{ categorie.nom }}</option>
+    </select>
+  </div>
+  
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Nom</th>
+        <th>Prix</th>
+        <th>Stock</th>
+        <th>Categorie</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produit of produits">
+        <td><img [src]="produit.imageUrl" alt="Image produit" class="product-image" style="height: 20px;" /></td>
+        <td>{{ produit.nom }}</td>
+        <td>{{ produit.prix }}€</td>
+        <td>{{ produit.stock }}</td>
+        <td>{{ produit.categorie.nom }}</td>
+        <td>
+          <button class="btn btn-sm btn-info me-2" (click)="showDetails(produit)">
+            <i class="fas fa-info-circle"></i> Détails
+          </button>
+          <button class="btn btn-sm btn-warning me-2" (click)="setEditProduit(produit)">
+            <i class="fas fa-edit"></i> Éditer
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteProduit(produit.id!)">
+            <i class="fas fa-trash-alt"></i> Supprimer
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <!-- Product Details Modal -->
+<!-- Product Details Modal -->
+<div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="productDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productDetailsModalLabel">Détails du Produit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <!-- Image du produit -->
+            <div class="product-image">
+              <img *ngIf="selectedProduit?.imageUrl" [src]="selectedProduit?.imageUrl" alt="Image du produit" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <!-- Détails du produit -->
+            <h4>{{ selectedProduit?.nom }}</h4>
+            <p><strong>Description:</strong> {{ selectedProduit?.description }}</p>
+            <p><strong>Prix:</strong> {{ selectedProduit?.prix }}TND</p>
+            <p><strong>Stock:</strong> {{ selectedProduit?.stock }}</p>
+            <p><strong>Catégorie:</strong> {{ selectedProduit?.categorie?.nom }}</p>
+          </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="text-center mt-4">
+          <h5>QR Code:</h5>
+          <img [src]="generateQRCodeUrl(selectedProduit?.id)" alt="QR Code" class="img-fluid" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Formulaire d'édition -->
+  <div class="card shadow" *ngIf="editProduit">
+    <div class="card-header bg-info text-white">Modifier le Produit</div>
+    <div class="card-body">
+      <form (ngSubmit)="updateProduit()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="nom" [(ngModel)]="editProduit.nom" name="nom" required />
+          </div>
+
+          <div class="col-md-6">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" [(ngModel)]="editProduit.description" name="description" required />
+          </div>
+
+          <div class="col-md-4">
+            <label for="prix" class="form-label">Prix</label>
+            <input type="number" class="form-control" id="prix" [(ngModel)]="editProduit.prix" name="prix" required />
+          </div>
+
+          <div class="col-md-4">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" class="form-control" id="stock" [(ngModel)]="editProduit.stock" name="stock" required />
+          </div>
+
+          <div class="col-md-4">
+            <label for="imageUrl" class="form-label">URL Image</label>
+            <input type="text" class="form-control" id="imageUrl" [(ngModel)]="editProduit.imageUrl" name="imageUrl" required />
+          </div>
+
+          <div class="col-md-6">
+            <label for="categorie" class="form-label">Catégorie</label>
+            <select class="form-select" [(ngModel)]="editProduit.categorie" name="categorie" required>
+              <option *ngFor="let category of categories" [ngValue]="category">{{ category.nom }}</option>
+            </select>
+          </div>
+
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary me-2">Mettre à jour</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Annuler</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,136 @@
+<!-- Navbar Minimaliste -->
+<nav class="navbar">
+    <div class="container">
+      <a href="#" class="logo">Shop<span>Hub</span></a>
+      <div class="nav-links">
+        <a href="#" class="nav-link active"><i class="fas fa-home"></i> Accueil</a>
+        <a href="#" class="nav-link"><i class="fas fa-blog"></i> Blog</a>
+        <a href="#" class="nav-link"><i class="fas fa-box-open"></i> Produits</a>
+      </div>
+      <button class="bt" (click)="login()">
+        <i class="fas fa-user"></i> Connexion
+      </button>
+      
+    </div>
+  </nav>
+  
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <div class="hero-content">
+      <h1>Découvrez nos produits exclusifs</h1>
+      <p>Des articles de qualité pour votre quotidien</p>
+      <button class="btn-primary">
+        <i class="fas fa-shopping-bag"></i> Explorer
+      </button>
+    </div>
+  </div>
+  
+  <!-- Produits Section -->
+  <div class="products-section">
+    <div class="section-header">
+      <h2>Nos Produits Phares</h2>
+      <div class="filter-options">
+        <span>Trier par:</span>
+        <select>
+          <option>Popularité</option>
+          <option>Prix croissant</option>
+          <option>Prix décroissant</option>
+        </select>
+      </div>
+    </div>
+  
+    <!-- Grille de Produits -->
+    <div class="products-grid">
+      <div *ngFor="let produit of produits" class="product-card">
+        <div class="product-badge" *ngIf="produit.stock">En Stock</div>
+        <div class="product-image">
+          <img [src]="produit.imageUrl || 'assets/placeholder-product.jpg'" alt="{{produit.nom}}">
+          <div class="quick-actions">
+            <button class="icon-btn" (click)="openModal(produit)">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="icon-btn">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3>{{produit.nom}}</h3>
+          <div class="product-meta">
+            <span class="category">{{produit.categorie.nom}}</span>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+          <div class="product-footer">
+            <span class="price">{{produit.prix | currency:'EUR'}}</span>
+            <button class="btn-cart">
+              <i class="fas fa-cart-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Produit -->
+  <div class="modal-overlay" [class.active]="showModal">
+    <div class="product-modal">
+      <button class="close-modal" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="modal-content">
+        <div class="modal-images">
+          <img [src]="selectedProduit?.imageUrl || 'assets/placeholder-product.jpg'" alt="{{selectedProduit?.nom}}">
+        </div>
+        
+        <div class="modal-details">
+          <h2>{{selectedProduit?.nom}}</h2>
+          <div class="price">{{selectedProduit?.prix | currency:'EUR'}}</div>
+          
+          <div class="details-section">
+            <h4>Description</h4>
+            <p>{{selectedProduit?.description}}</p>
+          </div>
+          
+          <div class="details-grid">
+            <div class="detail-item">
+              <i class="fas fa-box-open"></i>
+              <span>Disponibilité: {{selectedProduit?.stock}} en stock</span>
+            </div>
+            <div class="detail-item">
+              <i class="fas fa-tag"></i>
+              <span>Catégorie: {{selectedProduit?.categorie?.nom}}</span>
+            </div>
+          </div>
+          
+          <!-- QR Code Section -->
+          <div class="qr-section">
+            <div class="qr-code">
+              <img [src]="generateQRCode(selectedProduit!)" alt="QR Code">
+            </div>
+            <div class="qr-info">
+              <h4>Scan Me</h4>
+              <p>Scannez ce code pour enregistrer les détails du produit</p>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <div class="quantity-selector">
+              <button class="qty-btn"><i class="fas fa-minus"></i></button>
+              <span>1</span>
+              <button class="qty-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            <button class="btn-add-to-cart">
+              <i class="fas fa-shopping-cart"></i> Ajouter au panier
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

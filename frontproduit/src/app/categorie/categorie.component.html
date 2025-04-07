@@ -1,0 +1,69 @@
+<div class="category-container">
+  <h2>Gestion des Catégories</h2>
+
+  <!-- Bouton d'ajout -->
+  <button class="btn btn-add" (click)="openAddModal()">+ Ajouter une Catégorie</button>
+
+  <!-- Table des catégories -->
+  <h3>Liste des Catégories</h3>
+  <table class="categories-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let categorie of categories">
+        <td>{{ categorie.nom }}</td>
+        <td>{{ categorie.description }}</td>
+        <td>
+          <button (click)="setEditCategorie(categorie)" class="btn btn-secondary">Éditer</button>
+          <button (click)="deleteCategorie(categorie.id!)" class="btn btn-danger">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Formulaire modification -->
+  <div *ngIf="editCategorie" class="category-form edit-form">
+    <h3>Modifier la Catégorie</h3>
+    <form (ngSubmit)="updateCategorie()">
+      <div class="form-group">
+        <label for="edit-nom">Nom:</label>
+        <input type="text" id="edit-nom" [(ngModel)]="editCategorie.nom" name="nom" required />
+      </div>
+
+      <div class="form-group">
+        <label for="edit-description">Description:</label>
+        <input type="text" id="edit-description" [(ngModel)]="editCategorie.description" name="description" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Mettre à jour</button>
+      <button type="button" (click)="cancelEdit()" class="btn btn-secondary">Annuler</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL AJOUT -->
+<div class="modal" [ngClass]="{ 'show': showAddModal }">
+  <div class="modal-content">
+    <span class="close" (click)="closeAddModal()">&times;</span>
+    <h2>Ajouter une Catégorie</h2>
+    <form (ngSubmit)="addCategorie()" class="category-form">
+      <div class="form-group">
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" [(ngModel)]="categorie.nom" name="nom" required />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" id="description" [(ngModel)]="categorie.description" name="description" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+      <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Annuler</button>
+    </form>
+  </div>
+</div>

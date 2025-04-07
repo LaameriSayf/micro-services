@@ -1,0 +1,60 @@
+<div class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="toggle-btn" (click)="toggleSidebar()">
+      <i [class]="isCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+    </div>
+    
+    <div class="sidebar-header">
+      <span class="sidebar-icon">🛒</span>
+      <span class="sidebar-text" *ngIf="!isCollapsed">Mon E-commerce</span>
+    </div>
+    
+    <nav class="sidebar-menu">
+      <ul>
+        <li routerLink="/dashboard" routerLinkActive="active">
+          <span class="sidebar-icon">📊</span>
+          <span class="sidebar-text" *ngIf="!isCollapsed">Tableau de bord</span>
+        </li>
+        
+        <li routerLink="/categories" routerLinkActive="active" *ngIf="authService.hasRole('admin') || authService.hasRole('user')">
+            <span class="sidebar-icon">🏷️</span>
+            <span class="sidebar-text" *ngIf="!isCollapsed">Catégories</span>
+          </li>
+          <li routerLink="/produits" routerLinkActive="active" *ngIf="authService.hasRole('admin') || authService.hasRole('user')">
+            <span class="sidebar-icon">📦</span>
+            <span class="sidebar-text" *ngIf="!isCollapsed">Produits</span>
+          </li>
+          
+        
+        <li routerLink="/commandes" routerLinkActive="active">
+          <span class="sidebar-icon">🛒</span>
+          <span class="sidebar-text" *ngIf="!isCollapsed">Commandes</span>
+        </li>
+        
+        <li routerLink="/clients" routerLinkActive="active">
+          <span class="sidebar-icon">👥</span>
+          <span class="sidebar-text" *ngIf="!isCollapsed">Clients</span>
+        </li>
+        
+        <li routerLink="/statistiques" routerLinkActive="active">
+          <span class="sidebar-icon">📈</span>
+          <span class="sidebar-text" *ngIf="!isCollapsed">Statistiques</span>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="sidebar-footer" *ngIf="!isCollapsed">
+        <div class="user-info">
+            <span class="sidebar-icon">👤</span>
+            <span class="sidebar-text">{{ userName }}</span> <!-- Affiche le nom de l'utilisateur -->
+          </div>
+          <div class="user-role">
+            <span class="sidebar-icon">🔑</span>
+            <span class="sidebar-text">{{ userRole.join(', ') }}</span> <!-- Affiche les rôles de l'utilisateur -->
+          </div>
+      <button class="logout-btn" (click)="logout()">
+        <span class="sidebar-icon">🚪</span>
+        <span class="sidebar-text">Déconnexion</span>
+      </button>
+      
+    </div>
+  </div>

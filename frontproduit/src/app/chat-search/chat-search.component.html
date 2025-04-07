@@ -1,0 +1,46 @@
+<!-- Bouton flottant d'icône -->
+<div class="chat-icon" (click)="toggleChat()">
+    💬
+  </div>
+  
+  <!-- Fenêtre du chat (modale) -->
+  <div class="chat-modal" *ngIf="isOpen">
+    <div class="chat-header">
+      <span>Assistant Chat</span>
+      <button class="close-btn" (click)="toggleChat()">✖</button>
+    </div>
+  
+    <div class="chat-body">
+      <div *ngFor="let msg of messages" [ngClass]="msg.role">
+        <div class="bubble">
+          <!-- Messages de l'utilisateur -->
+          <ng-container *ngIf="msg.role === 'user'">
+            {{ msg.text }}
+          </ng-container>
+  
+          <!-- Réponses du Bot -->
+          <ng-container *ngIf="msg.role === 'bot'">
+            <ng-container *ngIf="msg.typing">
+              🧑‍💻 Le bot est en train de taper...
+            </ng-container>
+            <ng-container *ngIf="msg.produits">
+              <div *ngFor="let p of msg.produits" class="product">
+                <img [src]="p.image" alt="Image produit" />
+                <div>
+                  <strong>{{ p.titre }}</strong><br />
+                  ⭐ {{ p.avis }} | 💶 {{ p.prix }}<br />
+                  <a [href]="p.lien" target="_blank">Voir le produit</a>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  
+    <div class="chat-footer">
+      <input [(ngModel)]="query" (keyup.enter)="sendMessage()" placeholder="Posez une question..." />
+      <button (click)="sendMessage()">Envoyer</button>
+    </div>
+  </div>
+  
