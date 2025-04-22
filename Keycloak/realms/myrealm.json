@@ -1,0 +1,27 @@
+{
+  "realm": "Authentication",
+  "enabled": true,
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin"
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "springboot-client",
+      "secret": "secret",
+      "enabled": true,
+      "publicClient": false,
+      "redirectUris": ["*"],
+      "protocol": "openid-connect"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass  # Mot de passe obligatoire
+      MYSQL_DATABASE: user_db        # Crée la base automatiquement
+      MYSQL_USER: root           # Utilisateur dédié
+      MYSQL_PASSWORD:       # Mot de passe utilisateur
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql    # Persistance des données
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend
+
+  eureka-server:
+    build:
+      context: ./discovery
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - backend
+
+  user-service:  # Nom plus explicite
+    build:
+      context: ./user
+    container_name: user-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_db
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: userpass
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    networks:
+      - backend
+  keycloak:
+    container_name: microservice-keycloak-1
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - DB_VENDOR=mysql
+      - DB_ADDR=mysql-container-offre
+      - DB_PORT=3306
+      - DB_DATABASE=KeycloakDB
+      - DB_USER=root
+      - DB_PASSWORD=
+      - KEYCLOAK_JDBC_PARAMS=useSSL=false&allowPublicKeyRetrieval=true
+      - KC_HOSTNAME_STRICT=false
+  produit-service:
+    build:
+      context: ./backproduit
+    container_name: produit-service
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/Produit?createDatabaseIfNotExist=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    networks:
+      - backend
+
+
+
+volumes:
+  mysql_data:
+
+networks:
+  backend:
+    driver: bridge

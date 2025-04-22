@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: tn.esprit.examen.nomPrenomClasseExamen.nomPrenomClasseExamenApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 28.97 s -- in tn.esprit.examen.nomPrenomClasseExamen.nomPrenomClasseExamenApplicationTests
